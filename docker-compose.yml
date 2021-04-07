@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  mysql-development:
+    image: mysql:8.0.17
+    container_name: ppb-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: qwertyui
+      MYSQL_DATABASE: ppb
+    ports:
+      - "3308:3306"
+      
+  horoscope:
+    build: ppb-product-horoscope
+    ports:
+      - "8081:8080"
+
+networks:
+  default:
+    external:
+        name: ppb
