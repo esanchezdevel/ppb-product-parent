@@ -12,9 +12,11 @@ public class ProductConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	private StatsInterceptor statsInterceptor;
-	
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(statsInterceptor);
-    }
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(statsInterceptor)
+			.addPathPatterns("/horoscope/*", "/horoscope/lp/*")
+			.excludePathPatterns("/horoscope/lp/*/css/*", "/horoscope/lp/*/images/*", "/error", "/favicon.ico");
+	}
 }
