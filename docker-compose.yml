@@ -12,6 +12,7 @@ services:
       - "3308:3306"
     volumes:
           - ./src/main/resources/db:/docker-entrypoint-initdb.d
+          - ../mysql-data:/var/lib/mysql
 
   billingcore:
     build: ppb-product-billingcore
