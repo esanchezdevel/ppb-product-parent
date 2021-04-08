@@ -8,9 +8,18 @@ services:
     hostname: ppb-mysql
     environment:
       MYSQL_ROOT_PASSWORD: qwertyui
-      MYSQL_DATABASE: horoscope
     ports:
       - "3308:3306"
+    volumes:
+          - ./src/main/resources/db:/docker-entrypoint-initdb.d
+
+  billingcore:
+    build: ppb-product-billingcore
+    ports:
+      - "8080:8080"
+    environment:
+      WAIT_HOSTS: ppb-mysql:3306
+    command: sh -c "/ppb-product-billingcore/wait && java -jar /ppb-product-billingcore/app.jar"
       
   horoscope:
     build: ppb-product-horoscope

@@ -54,5 +54,6 @@
 
 	<modules>
 		<module>ppb-product-horoscope</module>
+		<module>ppb-product-billingcore</module>
 	</modules>
 </project>
