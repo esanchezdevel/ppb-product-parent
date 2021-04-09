@@ -24,6 +24,7 @@
 		</article>
 		<button name="btn-subscribe" id="btn-subscribe" class="btn btn-success btn-lg w-100">Subscribir</button>
 		<input type="hidden" id="productTransactionId" th:value="${productTransactionId}">
+		<input type="hidden" id="sign" th:value="${sign}">
 		<p class="text-center">Si ya est&aacute;s registrado <a href="/horoscope/login">Login</a></p>
 	</section>
 </main>
@@ -37,12 +38,15 @@ $(function() {
 		console.log('button click');
 	
 		var ptid = $("#productTransactionId").val();
+		var sign = $("#sign").val();
 		var currentDomain = "http://" + document.location.host;
 		var url = currentDomain + "/horoscope/subscribe";
-		var request = $.post(url , {productTransactionId: ptid});
+		var request = $.post(url , {productTransactionId: ptid, sign: sign});
 
 		request.done(function(data) {
-			console.log('request done. ' + data);
+            var redirectUrl = "http://" + document.location.host + data
+            window.location.href = redirectUrl;
+				
 		});
 		
 	});
