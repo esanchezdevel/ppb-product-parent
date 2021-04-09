@@ -18,6 +18,8 @@ services:
     build: ppb-product-billingcore
     ports:
       - "8080:8080"
+    container_name: ppb-product-billingcore
+    hostname: ppb-product-billingcore
     environment:
       WAIT_HOSTS: ppb-mysql:3306
     command: sh -c "/ppb-product-billingcore/wait && java -jar /ppb-product-billingcore/app.jar"
@@ -26,6 +28,8 @@ services:
     build: ppb-product-horoscope
     ports:
       - "8081:8080"
+    container_name: ppb-product-horoscope
+    hostname: ppb-product-horoscope
     environment:
       WAIT_HOSTS: ppb-mysql:3306
     command: sh -c "/ppb-product-horoscope/wait && java -jar /ppb-product-horoscope/app.jar"
