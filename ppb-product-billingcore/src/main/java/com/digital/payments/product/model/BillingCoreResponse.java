@@ -2,19 +2,19 @@ package com.digital.payments.product.model;
 
 public class BillingCoreResponse {
 
-	private String product;
-	private String productTransactionId;
-	
-	public String getProduct() {
-		return product;
+	private String transactionStatus;
+
+	public String getTransactionStatus() {
+		return transactionStatus;
 	}
-	public void setProduct(String product) {
-		this.product = product;
+
+	public void setTransactionStatus(String transactionStatus) {
+		this.transactionStatus = transactionStatus;
 	}
-	public String getProductTransactionId() {
-		return productTransactionId;
-	}
-	public void setProductTransactionId(String productTransactionId) {
-		this.productTransactionId = productTransactionId;
+
+	@Override
+	public String toString() {
+		return "BillingCoreResponse [" + (transactionStatus != null ? "transactionStatus=" + transactionStatus : "")
+				+ "]";
 	}
 }

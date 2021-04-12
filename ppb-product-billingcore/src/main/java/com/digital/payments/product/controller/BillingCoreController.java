@@ -22,7 +22,10 @@ public class BillingCoreController {
 		BillingCoreResponse response = new BillingCoreResponse();
 		
 		//TODO call to paypal API
+		paypalAccessToken.setProduct(request.getProduct());
 		paypalAccessToken.execute();
+		
+		response.setTransactionStatus("subscribed"); //TODO change
 		
 		return ResponseEntity.ok(response);
 	}

@@ -1,38 +1,44 @@
 package com.digital.payments.product.service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.digital.payments.product.entity.PaypalCredential;
 import com.digital.payments.product.http.HttpClient;
 import com.digital.payments.product.http.HttpClientResponse;
+import com.digital.payments.product.http.util.BasicAuthenticationHeader;
+import com.digital.payments.product.repository.PaypalCredentialRepository;
 
 @Component
 public class PaypalAccessToken implements Service {
 
+	private String product;
+
 	@Autowired
 	private HttpClient httpClient;
+
+	@Autowired
+	private PaypalCredentialRepository paypalCredentialRepository;
 
 	@Override
 	public void execute() {
 
+		PaypalCredential paypalCredential = paypalCredentialRepository.findByProduct(product);
+
+		if (paypalCredential == null) {
+			// TODO log error
+			System.out.println("ERROR! Credentials not found for product: " + this.product);
+			return;
+		}
 		Map<String, String> headers = new HashMap<>();
+		headers.put("Authorization",
+				BasicAuthenticationHeader.create(paypalCredential.getUsername(), paypalCredential.getPassword()));
 		headers.put("Accept", "application/json");
 		headers.put("Accept-Language", "es_US");
-
-		String user = "Abkjx-knea2qohl6nluebZicwYKCYey_Qg99q_p5ibq6ZBRruXCpZIO1LpM2gcLuaeSszghMPKRfQyMO";
-		String password = "EHpcd4AG0xKDZkGI4BH8DO2wPpkhNeAvTDAakwIHA-v4ncArvkx7UevI88ZIOXXVcxCE8o3a0gwQ3JLZ";
-		String auth = user + ":" + password;
-
-		byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
-		String authHeaderValue = "Basic " + new String(encodedAuth);
-
-		headers.put("Authorization", authHeaderValue);
-
+		
 		Map<String, String> data = new HashMap<>();
 		data.put("grant_type", "client_credentials");
 
@@ -40,5 +46,9 @@ public class PaypalAccessToken implements Service {
 				headers, data);
 
 		System.out.println("TEST-response: " + httpClientResponse);
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
 	}
 }
