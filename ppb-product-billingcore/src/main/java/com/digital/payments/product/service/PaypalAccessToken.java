@@ -3,6 +3,8 @@ package com.digital.payments.product.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import com.digital.payments.product.repository.PaypalCredentialRepository;
 @Component
 public class PaypalAccessToken implements Service {
 
+	private static final Logger logger = LoggerFactory.getLogger(PaypalAccessToken.class);
+	
 	private String product;
 
 	@Autowired
@@ -29,8 +33,7 @@ public class PaypalAccessToken implements Service {
 		PaypalCredential paypalCredential = paypalCredentialRepository.findByProduct(product);
 
 		if (paypalCredential == null) {
-			// TODO log error
-			System.out.println("ERROR! Credentials not found for product: " + this.product);
+			logger.debug("ERROR! Credentials not found for product: " + this.product);
 			return;
 		}
 		Map<String, String> headers = new HashMap<>();
@@ -45,7 +48,7 @@ public class PaypalAccessToken implements Service {
 		HttpClientResponse httpClientResponse = httpClient.get("https://api-m.sandbox.paypal.com/v1/oauth2/token",
 				headers, data);
 
-		System.out.println("TEST-response: " + httpClientResponse);
+		logger.debug("response: " + httpClientResponse);
 	}
 
 	public void setProduct(String product) {

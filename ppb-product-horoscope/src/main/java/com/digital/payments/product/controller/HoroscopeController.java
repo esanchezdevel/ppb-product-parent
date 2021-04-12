@@ -2,6 +2,8 @@ package com.digital.payments.product.controller;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import com.digital.payments.product.jpa.repository.TransactionRepository;
 @Controller
 @RequestMapping("/horoscope")
 public class HoroscopeController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HoroscopeController.class);
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
@@ -42,14 +46,14 @@ public class HoroscopeController {
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(@RequestParam Map<String, String> body, RedirectAttributes attributes) {
 		
-		System.out.println("TEST-subscribe request: " + body.get("productTransactionId"));
+		logger.debug("TEST-subscribe request: " + body.get("productTransactionId"));
 		
 		String sign = body.get("sign");
 		
 		//TODO make request to billingCore
 		Transaction transaction = transactionRepository.getOne(Long.parseLong(body.get("productTransactionId")));
 		
-		System.out.println("TEST-transaction from database: " + transaction);
+		logger.debug("TEST-transaction from database: " + transaction);
 		
 		
 		//Redirect to product

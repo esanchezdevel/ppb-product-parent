@@ -23,6 +23,8 @@ services:
     environment:
       WAIT_HOSTS: ppb-mysql:3306
     command: sh -c "/ppb-product-billingcore/wait && java -jar /ppb-product-billingcore/app.jar"
+    volumes:
+          - ../logs/ppb-product-billingcore:/opt/logs/ppb-product-billingcore
       
   horoscope:
     build: ppb-product-horoscope
@@ -33,6 +35,8 @@ services:
     environment:
       WAIT_HOSTS: ppb-mysql:3306
     command: sh -c "/ppb-product-horoscope/wait && java -jar /ppb-product-horoscope/app.jar"
+    volumes:
+          - ../logs/ppb-product-horoscope:/opt/logs/ppb-product-horoscope
       
 networks:
   default:
