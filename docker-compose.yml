@@ -2,18 +2,6 @@ version: '3.5'
 
 services:
 
-  mysql-development:
-    image: mysql:8.0.17
-    container_name: ppb-mysql
-    hostname: ppb-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: qwertyui
-    ports:
-      - "3308:3306"
-    volumes:
-          - ./src/main/resources/db:/docker-entrypoint-initdb.d
-          - ../mysql-data:/var/lib/mysql
-
   billingcore:
     build: ppb-product-billingcore
     ports:
