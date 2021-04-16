@@ -17,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.digital.payments.product.jpa.entity.Transaction;
 import com.digital.payments.product.jpa.repository.TransactionRepository;
+import com.digital.payments.product.model.SubscribeRequest;
+import com.digital.payments.product.model.SubscribeResponse;
+import com.digital.payments.product.service.Subscribe;
 
 @Controller
 @RequestMapping("/horoscope")
@@ -26,6 +29,9 @@ public class HoroscopeController {
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
+	@Autowired
+	private Subscribe subscribe;
 	
 	@GetMapping
 	public String index(Model model) {
@@ -53,8 +59,11 @@ public class HoroscopeController {
 		//TODO make request to billingCore
 		Transaction transaction = transactionRepository.getOne(Long.parseLong(body.get("productTransactionId")));
 		
-		logger.debug("TEST-transaction from database: " + transaction);
+		SubscribeRequest subscribeRequest = new SubscribeRequest();
+		subscribeRequest.setTransactionId(transaction.getId());
+		SubscribeResponse subscribeResponse = subscribe.execute(subscribeRequest);
 		
+		logger.debug("subscribeResponse: " + subscribeResponse);
 		
 		//Redirect to product
 		//TODO if it's ok redirect to Arias, if not redirect to Error
