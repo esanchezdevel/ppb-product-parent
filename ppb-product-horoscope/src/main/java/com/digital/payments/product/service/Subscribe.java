@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.digital.payments.product.httpclient.Post;
 import com.digital.payments.product.httpclient.model.HttpClientRequest;
@@ -13,6 +14,7 @@ import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.SubscribeRequest;
 import com.digital.payments.product.model.SubscribeResponse;
 
+@Component
 public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Subscribe.class);
