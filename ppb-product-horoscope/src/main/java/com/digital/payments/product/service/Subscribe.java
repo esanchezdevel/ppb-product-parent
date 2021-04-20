@@ -3,17 +3,22 @@ package com.digital.payments.product.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.digital.payments.product.http.HttpClient;
-import com.digital.payments.product.http.HttpClientResponse;
+import com.digital.payments.product.httpclient.Post;
+import com.digital.payments.product.httpclient.model.HttpClientRequest;
+import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.SubscribeRequest;
 import com.digital.payments.product.model.SubscribeResponse;
 
 public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 
+	private static final Logger logger = LoggerFactory.getLogger(Subscribe.class);
+	
 	@Autowired
-	private HttpClient httpClient;
+	private Post post;
 	
 	private static final String url = "http://ppb-product-billingcore/subscribe";
 	
@@ -23,14 +28,17 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 	@Override
 	public SubscribeResponse execute(SubscribeRequest request) {
 		
+		logger.debug("Handling subscribe request: " + request);
+		
 		SubscribeResponse response = new SubscribeResponse();
 		
 		data = new HashMap<>();
 		data.put("product", "horosocope");
 		data.put("productTransactionId", String.valueOf(request.getTransactionId()));
 		
-		HttpClientResponse httpClientResponse = httpClient.post(url, headers, data);
-		
+		HttpClientRequest httpClientRequest = new HttpClientRequest(url, headers, data);
+		HttpClientResponse httpClientResponse = post.execute(httpClientRequest);
+	
 		if (httpClientResponse.getCode() == 200) {
 			response.setStatus("SUBSCRIBED");
 		} else {

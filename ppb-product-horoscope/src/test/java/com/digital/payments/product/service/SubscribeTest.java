@@ -1,7 +1,9 @@
 package com.digital.payments.product.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.digital.payments.product.http.HttpClient;
-import com.digital.payments.product.http.HttpClientResponse;
+import com.digital.payments.product.httpclient.Post;
+import com.digital.payments.product.httpclient.model.HttpClientRequest;
+import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.jpa.entity.Transaction;
 import com.digital.payments.product.model.SubscribeRequest;
 import com.digital.payments.product.model.SubscribeResponse;
@@ -25,15 +28,9 @@ public class SubscribeTest {
 
 	private static Transaction transaction;
 	
-	/*
-	 * create mock of the autowired bean
-	 */
 	@Mock
-	private HttpClient httpClient; 
+	private Post post;
 	
-	/*
-	 * inject mocks in the class that we will call
-	 */
 	@InjectMocks
     private Subscribe subscribe;
 	
@@ -49,24 +46,22 @@ public class SubscribeTest {
 	@DisplayName("test_subscribe_success")
 	void testSubscribeSuccess() {
 		
+		String successResponse = "{\"result\" : \"ok\"}";
+		
 		Map<String, String> data = new HashMap<>();
 		data.put("product", "horosocope");
 		data.put("productTransactionId", String.valueOf(transaction.getId()));
 		
-		HttpClientResponse httpClientResponse = new HttpClientResponse(200, "");
-		when(httpClient.post("http://ppb-product-billingcore/subscribe", null, data)).thenReturn(httpClientResponse);
+		HttpClientResponse httpClientResponse = new HttpClientResponse(200, successResponse);
+		lenient().when(post.execute(any(HttpClientRequest.class))).thenReturn(httpClientResponse);
 		
 		SubscribeRequest request = new SubscribeRequest();
 		request.setTransactionId(transaction.getId());
 		
-		/*
-		 * request to subscribe.execute. Be careful!!! if we make a new Subscribe() then 
-		 * it will not have the Mocks injected. So we must use the instance declared at the beginning 
-		 * of the class with the @InjectMocks tag
-		 */
 		SubscribeResponse response = subscribe.execute(request);
 		
-		assertEquals("SUBSCRIBED", response.getStatus());
+		assertNotNull(response, () -> "Subscribe response must not be null");
+		assertEquals("SUBSCRIBED", response.getStatus(), () -> "Wrong subscribe response status");
 	}
 	
 	
@@ -79,13 +74,14 @@ public class SubscribeTest {
 		data.put("productTransactionId", String.valueOf(transaction.getId()));
 		
 		HttpClientResponse httpClientResponse = new HttpClientResponse(400, "");
-		when(httpClient.post("http://ppb-product-billingcore/subscribe", null, data)).thenReturn(httpClientResponse);
+		when(post.execute(any(HttpClientRequest.class))).thenReturn(httpClientResponse);
 		
 		SubscribeRequest request = new SubscribeRequest();
 		request.setTransactionId(transaction.getId());
 		
 		SubscribeResponse response = subscribe.execute(request);
 		
-		assertEquals("ERROR", response.getStatus());
+		assertNotNull(response, () -> "Subscribe response must not be null");
+		assertEquals("ERROR", response.getStatus(), () -> "Wrong subscribe response status");
 	}
 }
