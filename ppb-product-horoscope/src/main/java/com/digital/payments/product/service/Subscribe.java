@@ -18,7 +18,7 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Subscribe.class);
 	
-	private static final String url = "http://ppb-product-billingcore/subscribe";
+	private static final String url = "http://ppb-product-billingcore:8080/subscribe";
 	
 	private Map<String, String> headers;
 	private Map<String, String> data;
