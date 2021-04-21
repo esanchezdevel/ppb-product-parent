@@ -21,7 +21,7 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 	private static final String url = "http://ppb-product-billingcore:8080/subscribe";
 	
 	private Map<String, String> headers;
-	private Map<String, String> data;
+	private Map<String, Object> data;
 	
 	private Post post = new Post();
 		
@@ -37,7 +37,7 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 		
 		data = new HashMap<>();
 		data.put("product", "horosocope");
-		data.put("productTransactionId", String.valueOf(request.getTransactionId()));
+		data.put("productTransactionId", request.getTransactionId());
 		
 		HttpClientRequest httpClientRequest = new HttpClientRequest(url, headers, data);
 		HttpClientResponse httpClientResponse = post.execute(httpClientRequest);
