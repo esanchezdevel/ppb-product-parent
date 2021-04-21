@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.digital.payments.product.httpclient.Post;
@@ -19,14 +18,13 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Subscribe.class);
 	
-	@Autowired
-	private Post post;
-	
 	private static final String url = "http://ppb-product-billingcore/subscribe";
 	
 	private Map<String, String> headers;
 	private Map<String, String> data;
 	
+	private Post post = new Post();
+		
 	@Override
 	public SubscribeResponse execute(SubscribeRequest request) {
 		
