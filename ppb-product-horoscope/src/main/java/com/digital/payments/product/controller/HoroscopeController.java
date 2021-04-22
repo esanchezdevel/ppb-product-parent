@@ -52,11 +52,10 @@ public class HoroscopeController {
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(@RequestParam Map<String, String> body, RedirectAttributes attributes) {
 		
-		logger.debug("TEST-subscribe request: " + body.get("productTransactionId"));
+		logger.debug("Handling Subscribe Request: " + body.get("productTransactionId"));
 		
 		String sign = body.get("sign");
 		
-		//TODO make request to billingCore
 		Transaction transaction = transactionRepository.getOne(Long.parseLong(body.get("productTransactionId")));
 		
 		SubscribeRequest subscribeRequest = new SubscribeRequest();
@@ -67,7 +66,13 @@ public class HoroscopeController {
 		
 		//Redirect to product
 		//TODO if it's ok redirect to Arias, if not redirect to Error
-		return ResponseEntity.ok("/horoscope/" + sign);
+		if ("SUBSCRIBED".equals(subscribeResponse.getStatus())) {
+			return ResponseEntity.ok("/horoscope/" + sign);	
+		} else {
+			return ResponseEntity.ok("/error");
+		}
+		
+		
 		
 	}
 	

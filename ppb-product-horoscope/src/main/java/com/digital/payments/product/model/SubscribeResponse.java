@@ -29,4 +29,11 @@ public class SubscribeResponse {
 	public void setErrorDesc(String errorDesc) {
 		this.errorDesc = errorDesc;
 	}
+
+	@Override
+	public String toString() {
+		return "SubscribeResponse [" + (status != null ? "status=" + status + ", " : "")
+				+ (errorCode != null ? "errorCode=" + errorCode + ", " : "")
+				+ (errorDesc != null ? "errorDesc=" + errorDesc : "") + "]";
+	}
 }
