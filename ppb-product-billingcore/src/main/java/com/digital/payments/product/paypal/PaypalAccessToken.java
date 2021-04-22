@@ -1,4 +1,4 @@
-package com.digital.payments.product.service;
+package com.digital.payments.product.paypal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import com.digital.payments.product.http.util.BasicAuthenticationHeader;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 
 @Component
-public class PaypalAccessToken implements Service {
+public class PaypalAccessToken {
 
 	private static final Logger logger = LoggerFactory.getLogger(PaypalAccessToken.class);
 	
@@ -27,14 +27,13 @@ public class PaypalAccessToken implements Service {
 	@Autowired
 	private PaypalCredentialRepository paypalCredentialRepository;
 
-	@Override
-	public void execute() {
+	public String execute() {
 
 		PaypalCredential paypalCredential = paypalCredentialRepository.findByProduct(product);
 
 		if (paypalCredential == null) {
 			logger.debug("ERROR! Credentials not found for product: " + this.product);
-			return;
+			return null;
 		}
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Authorization",
@@ -49,6 +48,7 @@ public class PaypalAccessToken implements Service {
 				headers, data);
 
 		logger.debug("response: " + httpClientResponse);
+		return httpClientResponse.getResponse();
 	}
 
 	public void setProduct(String product) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.payments.product.model.BillingCoreRequest;
 import com.digital.payments.product.model.BillingCoreResponse;
-import com.digital.payments.product.service.PaypalAccessToken;
+import com.digital.payments.product.paypal.PaypalAccessToken;
 
 @RestController
 public class BillingCoreController {
