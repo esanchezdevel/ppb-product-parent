@@ -33,7 +33,8 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 		SubscribeResponse response = new SubscribeResponse();
 		
 		headers = new HashMap<>();
-		headers.put("ContentType", "application/json");
+		headers.put("Content-Type", "application/json");
+		headers.put("Accept", "application/json");
 		
 		data = new HashMap<>();
 		data.put("product", "horosocope");
