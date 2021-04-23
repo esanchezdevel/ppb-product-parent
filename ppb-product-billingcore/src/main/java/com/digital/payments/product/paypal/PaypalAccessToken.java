@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.digital.payments.product.entity.PaypalCredential;
-import com.digital.payments.product.http.HttpClient;
-import com.digital.payments.product.http.HttpClientResponse;
 import com.digital.payments.product.http.util.BasicAuthenticationHeader;
+import com.digital.payments.product.httpclient.Get;
+import com.digital.payments.product.httpclient.model.HttpClientRequest;
+import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 
 @Component
@@ -21,8 +22,7 @@ public class PaypalAccessToken {
 	
 	private String product;
 
-	@Autowired
-	private HttpClient httpClient;
+	private Get get = new Get();
 
 	@Autowired
 	private PaypalCredentialRepository paypalCredentialRepository;
@@ -41,14 +41,15 @@ public class PaypalAccessToken {
 		headers.put("Accept", "application/json");
 		headers.put("Accept-Language", "es_US");
 		
-		Map<String, String> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		data.put("grant_type", "client_credentials");
 
-		HttpClientResponse httpClientResponse = httpClient.get("https://api-m.sandbox.paypal.com/v1/oauth2/token",
-				headers, data);
+		HttpClientRequest httpClientRequest = new HttpClientRequest("https://api-m.sandbox.paypal.com/v1/oauth2/token", headers, data);
+		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
+		
 
 		logger.debug("response: " + httpClientResponse);
-		return httpClientResponse.getResponse();
+		return httpClientResponse.getBody();
 	}
 
 	public void setProduct(String product) {

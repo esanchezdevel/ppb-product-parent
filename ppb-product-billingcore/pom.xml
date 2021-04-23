@@ -16,5 +16,10 @@
 			<artifactId>ppb-product-jpa</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.digital.payments.product.httpclient</groupId>
+			<artifactId>ppb-product-httpclient</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
