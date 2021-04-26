@@ -20,9 +20,8 @@ public class Subscribe implements Service {
 	@Override
 	public BillingCoreResponse execute(BillingCoreRequest request) {
 		
-		// TODO request accessToken to Paypal
 		paypalAccessToken.setProduct(request.getProduct());
-		paypalAccessToken.execute();
+		String accessToken = paypalAccessToken.execute();
 		
 		
 		// TODO subscribe with paypal
