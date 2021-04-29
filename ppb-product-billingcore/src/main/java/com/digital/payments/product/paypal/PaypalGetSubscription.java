@@ -45,9 +45,12 @@ public class PaypalGetSubscription {
 		String url = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/" + request.getSubscriptionId();
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
-		headers.put("Authorization", "Bearer" + PaypalAccessToken.accessToken);
+		headers.put("Authorization", "Bearer " + PaypalAccessToken.accessToken);
 		
 		HttpClientRequest httpClientRequest = new HttpClientRequest(url, headers, null);
+		
+		logger.debug("httpClientRequest: " + httpClientRequest);
+		
 		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
 		
 		
