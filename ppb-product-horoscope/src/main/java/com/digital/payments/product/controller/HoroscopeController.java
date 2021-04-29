@@ -60,20 +60,16 @@ public class HoroscopeController {
 		
 		SubscribeRequest subscribeRequest = new SubscribeRequest();
 		subscribeRequest.setTransactionId(transaction.getId());
+		subscribeRequest.setSubscriptionId(body.get("subscriptionId"));
 		SubscribeResponse subscribeResponse = subscribe.execute(subscribeRequest);
 		
 		logger.debug("subscribeResponse: " + subscribeResponse);
 		
-		//Redirect to product
-		//TODO if it's ok redirect to Arias, if not redirect to Error
 		if ("SUBSCRIBED".equals(subscribeResponse.getStatus())) {
 			return ResponseEntity.ok("/horoscope/" + sign);	
 		} else {
 			return ResponseEntity.ok("/error");
 		}
-		
-		
-		
 	}
 	
 	@GetMapping("/{sign}")
