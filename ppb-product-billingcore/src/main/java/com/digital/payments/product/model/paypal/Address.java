@@ -1,11 +1,22 @@
 package com.digital.payments.product.model.paypal;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Address {
 
+	@SerializedName("address_line_1")
 	private String addressLine1;
+	
+	@SerializedName("admin_area_1")
 	private String adminArea1;
+	
+	@SerializedName("admin_area_2")
 	private String adminArea2;
+	
+	@SerializedName("postal_code")
 	private String postalCode;
+	
+	@SerializedName("country_code")
 	private String countryCode;
 
 	public String getAddressLine1() {

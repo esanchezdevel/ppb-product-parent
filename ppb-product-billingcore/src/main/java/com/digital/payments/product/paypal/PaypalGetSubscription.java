@@ -53,7 +53,6 @@ public class PaypalGetSubscription {
 		
 		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
 		
-		
 		PaypalGetSubscriptionResponse response;
 		
 		if (httpClientResponse.getCode() == 401) {

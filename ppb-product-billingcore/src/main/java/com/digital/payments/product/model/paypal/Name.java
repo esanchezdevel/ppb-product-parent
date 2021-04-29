@@ -1,8 +1,12 @@
 package com.digital.payments.product.model.paypal;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Name {
 
+	@SerializedName("given_name")
 	private String givenName;
+	
 	private String surname;
 
 	public String getGivenName() {
