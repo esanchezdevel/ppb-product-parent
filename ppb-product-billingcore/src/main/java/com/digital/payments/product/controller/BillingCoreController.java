@@ -27,10 +27,13 @@ public class BillingCoreController {
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(@RequestBody BillingCoreRequest request) {
 		
+		logger.debug("Handling request: " + request);
+		
 		BillingCoreResponse response = new BillingCoreResponse();
 		
 		//TODO get subscriptionInfo from Paypal https://developer.paypal.com/docs/subscriptions/full-integration/subscription-management/
 		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId());
+		paypalGetSubscriptionRequest.setProduct(request.getProduct());
 		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, 3);
 		
 		if (paypalGetSubscriptionResponse.isPresent()) {

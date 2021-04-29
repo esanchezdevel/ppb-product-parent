@@ -38,6 +38,7 @@ public class Subscribe implements Service<SubscribeRequest, SubscribeResponse> {
 		
 		data = new HashMap<>();
 		data.put("product", "horosocope");
+		data.put("subscriptionId", request.getSubscriptionId());
 		data.put("productTransactionId", request.getTransactionId());
 		
 		HttpClientRequest httpClientRequest = new HttpClientRequest(url, headers, data);
