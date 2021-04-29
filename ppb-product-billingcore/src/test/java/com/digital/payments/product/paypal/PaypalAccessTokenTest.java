@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.digital.payments.product.entity.PaypalCredential;
-import com.digital.payments.product.httpclient.Get;
+import com.digital.payments.product.httpclient.Post;
 import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 
@@ -29,7 +29,7 @@ public class PaypalAccessTokenTest {
 	private PaypalCredential paypalCredential;
 	
 	@Mock
-	private Get get;
+	private Post post;
 	
 	@Mock
 	private PaypalCredentialRepository paypalCredentialRepository;
@@ -54,7 +54,7 @@ public class PaypalAccessTokenTest {
 		HttpClientResponse response = new HttpClientResponse(200, jsonResponse);
 		
 		when(paypalCredentialRepository.findByProduct(any())).thenReturn(paypalCredential);
-		when(get.execute(any())).thenReturn(response);
+		when(post.execute(any())).thenReturn(response);
 		
 		String accessTokenResponse = paypalAccessToken.execute();
 		

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.digital.payments.product.entity.PaypalCredential;
 import com.digital.payments.product.http.util.BasicAuthenticationHeader;
-import com.digital.payments.product.httpclient.Get;
+import com.digital.payments.product.httpclient.Post;
 import com.digital.payments.product.httpclient.model.HttpClientRequest;
 import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
@@ -26,7 +26,7 @@ public class PaypalAccessToken {
 	
 	private String product;
 
-	private Get get = new Get();
+	private Post post = new Post();
 
 	@Autowired
 	private PaypalCredentialRepository paypalCredentialRepository;
@@ -49,7 +49,7 @@ public class PaypalAccessToken {
 		data.put("grant_type", "client_credentials");
 
 		HttpClientRequest httpClientRequest = new HttpClientRequest("https://api-m.sandbox.paypal.com/v1/oauth2/token", headers, data);
-		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
+		HttpClientResponse httpClientResponse = post.execute(httpClientRequest);
 		
 		logger.debug("response: " + httpClientResponse);
 		PaypalAccessTokenResponse response = new Gson().fromJson(httpClientResponse.getBody(), PaypalAccessTokenResponse.class);
