@@ -52,7 +52,7 @@ public class HoroscopeController {
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(@RequestParam Map<String, String> body, RedirectAttributes attributes) {
 		
-		logger.debug("Handling Subscribe Request: " + body.get("productTransactionId"));
+		logger.debug("Handling Subscribe Request: " + body.get("productTransactionId") + " subscriptionId: " + body.get("subscriptionId"));
 		
 		String sign = body.get("sign");
 		

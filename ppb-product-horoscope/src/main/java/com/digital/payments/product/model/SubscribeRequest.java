@@ -23,7 +23,6 @@ public class SubscribeRequest {
 
 	@Override
 	public String toString() {
-		return "SubscribeRequest [transactionId=" + transactionId + ", "
-				+ (subscriptionId != null ? "subscriptionId=" + subscriptionId : "") + "]";
+		return "SubscribeRequest [transactionId=" + transactionId + ", subscriptionId=" + subscriptionId + "]";
 	}
 }
