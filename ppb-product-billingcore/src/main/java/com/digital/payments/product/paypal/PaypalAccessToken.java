@@ -13,12 +13,16 @@ import com.digital.payments.product.http.util.BasicAuthenticationHeader;
 import com.digital.payments.product.httpclient.Get;
 import com.digital.payments.product.httpclient.model.HttpClientRequest;
 import com.digital.payments.product.httpclient.model.HttpClientResponse;
+import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
+import com.google.gson.Gson;
 
 @Component
 public class PaypalAccessToken {
 
 	private static final Logger logger = LoggerFactory.getLogger(PaypalAccessToken.class);
+	
+	public static String accessToken;
 	
 	private String product;
 
@@ -47,9 +51,12 @@ public class PaypalAccessToken {
 		HttpClientRequest httpClientRequest = new HttpClientRequest("https://api-m.sandbox.paypal.com/v1/oauth2/token", headers, data);
 		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
 		
-
 		logger.debug("response: " + httpClientResponse);
-		return httpClientResponse.getBody();
+		PaypalAccessTokenResponse response = new Gson().fromJson(httpClientResponse.getBody(), PaypalAccessTokenResponse.class);
+		
+		PaypalAccessToken.accessToken = response.getAccessToken();
+		
+		return response.getAccessToken();
 	}
 
 	public void setProduct(String product) {
