@@ -71,5 +71,6 @@
 	<modules>
 		<module>ppb-product-horoscope</module>
 		<module>ppb-product-billingcore</module>
+		<module>ppb-product-user-management</module>
 	</modules>
 </project>

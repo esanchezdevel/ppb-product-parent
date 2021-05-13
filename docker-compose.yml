@@ -13,6 +13,18 @@ services:
     command: sh -c "/ppb-product-billingcore/wait && java -jar /ppb-product-billingcore/app.jar"
     volumes:
           - ../logs/ppb-product-billingcore:/opt/logs/ppb-product-billingcore
+          
+  user-management:
+    build: ppb-product-user-management
+    ports:
+      - "8083:8080"
+    container_name: ppb-product-user-management
+    hostname: ppb-product-user-management
+    environment:
+      WAIT_HOSTS: ppb-mysql:3306
+    command: sh -c "/ppb-product-user-management/wait && java -jar /ppb-product-user-management/app.jar"
+    volumes:
+          - ../logs/ppb-product-user-management:/opt/logs/ppb-product-user-management
       
   horoscope:
     build: ppb-product-horoscope
