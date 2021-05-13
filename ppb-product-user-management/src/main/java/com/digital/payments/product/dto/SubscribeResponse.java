@@ -1,6 +1,6 @@
 package com.digital.payments.product.dto;
 
-public class SubscribeResponse {
+public class SubscribeResponse extends Response {
 
 	private String result;
 

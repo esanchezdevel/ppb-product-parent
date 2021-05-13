@@ -1,6 +1,6 @@
 package com.digital.payments.product.dto;
 
-public class SubscribeRequest {
+public class SubscribeRequest extends Request {
 
 	private String email;
 	private String name;
