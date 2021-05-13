@@ -19,7 +19,7 @@ public class UserController {
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(SubscribeRequest request) {
 		
-		logger.debug("request: " + request);
+		logger.debug("request: email: " + request.getEmail() + " name: " + request.getName());
 		
 		SubscribeResponse response = new SubscribeResponse();
 		response.setResult("success");
