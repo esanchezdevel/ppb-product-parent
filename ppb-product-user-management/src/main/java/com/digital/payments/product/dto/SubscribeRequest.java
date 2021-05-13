@@ -17,4 +17,9 @@ public class SubscribeRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public String toString() {
+		return "SubscribeRequest [email=" + email + ", name=" + name + "]";
+	}
 }
