@@ -1,6 +1,5 @@
 package com.digital.payments.product.controller;
 
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.digital.payments.product.dto.SubscribeRequest;
+import com.digital.payments.product.dto.SubscribeResponse;
 import com.digital.payments.product.jpa.entity.Transaction;
 import com.digital.payments.product.jpa.repository.TransactionRepository;
-import com.digital.payments.product.model.SubscribeRequest;
-import com.digital.payments.product.model.SubscribeResponse;
-import com.digital.payments.product.service.Subscribe;
+import com.digital.payments.product.service.SubscribeService;
 
 @Controller
 @RequestMapping("/horoscope")
@@ -31,7 +30,7 @@ public class HoroscopeController {
 	private TransactionRepository transactionRepository;
 	
 	@Autowired
-	private Subscribe subscribe;
+	private SubscribeService subscribeService;
 	
 	@GetMapping
 	public String index(Model model) {
@@ -50,22 +49,15 @@ public class HoroscopeController {
 	}
 	
 	@PostMapping("/subscribe")
-	public ResponseEntity<?> subscribe(@RequestParam Map<String, String> body, RedirectAttributes attributes) {
+	public ResponseEntity<?> subscribe(@RequestBody SubscribeRequest request, RedirectAttributes attributes) {
 		
-		logger.debug("Handling Subscribe Request: " + body.get("productTransactionId") + " subscriptionId: " + body.get("subscriptionId"));
+		logger.debug("Handling Subscribe Request: " + request.getProductTransactionId() + " subscriptionId: " + request.getSubscriptionId());
 		
-		String sign = body.get("sign");
+		String sign = request.getSign();
 		
-		Transaction transaction = transactionRepository.getOne(Long.parseLong(body.get("productTransactionId")));
+		SubscribeResponse subscribeResponse = subscribeService.execute(request);
 		
-		SubscribeRequest subscribeRequest = new SubscribeRequest();
-		subscribeRequest.setTransactionId(transaction.getId());
-		subscribeRequest.setSubscriptionId(body.get("subscriptionId"));
-		SubscribeResponse subscribeResponse = subscribe.execute(subscribeRequest);
-		
-		logger.debug("subscribeResponse: " + subscribeResponse);
-		
-		if ("SUBSCRIBED".equals(subscribeResponse.getStatus())) {
+		if ("SUBSCRIBED".equals(subscribeResponse.getTransactionStatus())) {
 			return ResponseEntity.ok("/horoscope/" + sign);	
 		} else {
 			return ResponseEntity.ok("/error");

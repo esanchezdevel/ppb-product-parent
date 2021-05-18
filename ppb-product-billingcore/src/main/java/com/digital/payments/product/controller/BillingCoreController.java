@@ -32,21 +32,21 @@ public class BillingCoreController {
 		BillingCoreResponse response = new BillingCoreResponse();
 		
 		//TODO get subscriptionInfo from Paypal https://developer.paypal.com/docs/subscriptions/full-integration/subscription-management/
-		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId());
-		paypalGetSubscriptionRequest.setProduct(request.getProduct());
-		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, 3);
-		
-		if (paypalGetSubscriptionResponse.isPresent()) {
-			//TODO subscribe to usersManagement
-			logger.debug("Get Subscriptions Response: " + paypalGetSubscriptionResponse.get());
-			
-			response.setTransactionStatus("SUBSCRIBED"); //TODO change
-		} else {
-			logger.debug("No subscription found in Paypal");
-			
-			response.setTransactionStatus("ERROR");
-		}
-		
+//		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId());
+//		paypalGetSubscriptionRequest.setProduct(request.getProduct());
+//		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, 3);
+//		
+//		if (paypalGetSubscriptionResponse.isPresent()) {
+//			//TODO subscribe to usersManagement
+//			logger.debug("Get Subscriptions Response: " + paypalGetSubscriptionResponse.get());
+//			
+//			response.setTransactionStatus("SUBSCRIBED"); //TODO change
+//		} else {
+//			logger.debug("No subscription found in Paypal");
+//			
+//			response.setTransactionStatus("ERROR");
+//		}
+		response.setTransactionStatus("SUBSCRIBED");
 		return ResponseEntity.ok(response);
 	}
 }
