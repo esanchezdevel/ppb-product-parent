@@ -2,11 +2,11 @@ package com.digital.payments.product.service;
 
 import org.springframework.stereotype.Component;
 
-import com.digital.payments.product.model.BillingCoreRequest;
-import com.digital.payments.product.model.BillingCoreResponse;
+import com.digital.payments.product.dto.BillingCoreRequest;
+import com.digital.payments.product.dto.BillingCoreResponse;
 
 @Component
-public interface Service {
+public interface PpbService {
 
 	BillingCoreResponse execute(BillingCoreRequest request);
 }

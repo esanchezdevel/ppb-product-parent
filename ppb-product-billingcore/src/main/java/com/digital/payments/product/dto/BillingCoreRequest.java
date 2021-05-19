@@ -1,4 +1,4 @@
-package com.digital.payments.product.model;
+package com.digital.payments.product.dto;
 
 public class BillingCoreRequest {
 

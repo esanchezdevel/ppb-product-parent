@@ -9,18 +9,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.digital.payments.product.model.BillingCoreRequest;
-import com.digital.payments.product.model.BillingCoreResponse;
+import com.digital.payments.product.dto.BillingCoreRequest;
+import com.digital.payments.product.dto.BillingCoreResponse;
 import com.digital.payments.product.paypal.PaypalAccessToken;
 
 @ExtendWith(MockitoExtension.class)
-public class SubscribeTest {
+public class SubscribeServiceTest {
 
 	@Mock
 	private PaypalAccessToken paypalAccessToken;
 	
 	@InjectMocks
-	private Subscribe subscribe;
+	private SubscribeService subscribe;
 	
 	@Test
 	@DisplayName("test_subscribe_success")

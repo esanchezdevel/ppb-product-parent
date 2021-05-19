@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.digital.payments.product.entity.PaypalCredential;
 import com.digital.payments.product.http.util.BasicAuthenticationHeader;
 import com.digital.payments.product.httpclient.Post;
 import com.digital.payments.product.httpclient.model.HttpClientRequest;
 import com.digital.payments.product.httpclient.model.HttpClientResponse;
+import com.digital.payments.product.model.PaypalCredential;
 import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 import com.google.gson.Gson;

@@ -3,7 +3,7 @@ package com.digital.payments.product.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.digital.payments.product.entity.PaypalCredential;
+import com.digital.payments.product.model.PaypalCredential;
 
 public interface PaypalCredentialRepository extends JpaRepository<PaypalCredential, Long>{
 

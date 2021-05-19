@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.payments.product.model.BillingCoreRequest;
-import com.digital.payments.product.model.BillingCoreResponse;
+import com.digital.payments.product.dto.BillingCoreRequest;
+import com.digital.payments.product.dto.BillingCoreResponse;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
 import com.digital.payments.product.paypal.PaypalGetSubscription;
+import com.digital.payments.product.service.SubscribeService;
 
 @RestController
 public class BillingCoreController {
@@ -22,7 +23,8 @@ public class BillingCoreController {
 	private static final Logger logger = LoggerFactory.getLogger(BillingCoreController.class);
 	
 	@Autowired
-	private PaypalGetSubscription paypalGetSubscription;
+	private SubscribeService subscribeService;
+	
 	
 	@PostMapping("/subscribe")
 	public ResponseEntity<?> subscribe(@RequestBody BillingCoreRequest request) {
@@ -32,20 +34,8 @@ public class BillingCoreController {
 		BillingCoreResponse response = new BillingCoreResponse();
 		
 		//TODO get subscriptionInfo from Paypal https://developer.paypal.com/docs/subscriptions/full-integration/subscription-management/
-//		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId());
-//		paypalGetSubscriptionRequest.setProduct(request.getProduct());
-//		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, 3);
-//		
-//		if (paypalGetSubscriptionResponse.isPresent()) {
-//			//TODO subscribe to usersManagement
-//			logger.debug("Get Subscriptions Response: " + paypalGetSubscriptionResponse.get());
-//			
-//			response.setTransactionStatus("SUBSCRIBED"); //TODO change
-//		} else {
-//			logger.debug("No subscription found in Paypal");
-//			
-//			response.setTransactionStatus("ERROR");
-//		}
+		subscribeService.execute(request);
+		
 		response.setTransactionStatus("SUBSCRIBED");
 		return ResponseEntity.ok(response);
 	}

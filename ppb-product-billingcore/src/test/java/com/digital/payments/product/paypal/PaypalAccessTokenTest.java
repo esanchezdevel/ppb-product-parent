@@ -13,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.digital.payments.product.entity.PaypalCredential;
 import com.digital.payments.product.httpclient.Post;
 import com.digital.payments.product.httpclient.model.HttpClientResponse;
+import com.digital.payments.product.model.PaypalCredential;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 
 @ExtendWith(MockitoExtension.class)

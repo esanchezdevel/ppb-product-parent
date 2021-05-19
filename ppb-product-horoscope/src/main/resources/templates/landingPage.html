@@ -61,17 +61,23 @@
 			var ptid = $("#productTransactionId").val();
 			var sign = $("#sign").val();
 			var currentDomain = "http://" + document.location.host;
+			var body = JSON.stringify({ "productTransactionId": ptid, "sign" : sign, "subscriptionId" : data.subscriptionID });
 			var url = currentDomain + "/horoscope/subscribe";
-			var request = $.post(url, {
-				productTransactionId : ptid,
-				sign : sign,
-				subscriptionId: data.subscriptionID
-			});
-
-			request.done(function(data) {
-				var redirectUrl = "http://" + document.location.host + data
-				window.location.href = redirectUrl;
-			});
+						
+			jQuery.ajax ({
+			    url: url,
+			    type: "POST",
+			    data: body,
+			    contentType: "application/json; charset=utf-8",
+			    success: function(data) {
+			    	var redirectUrl = "http://" + document.location.host + data
+			    	console.log('redirect to: ' + redirectUrl);
+					window.location.href = redirectUrl;
+			    },
+			    error: function(data) {
+			    	console.log('error in response: ' + JSON.stringify(data));
+			    }
+			})
 		}
 	}).render('#paypal-button-container');
 </script>
