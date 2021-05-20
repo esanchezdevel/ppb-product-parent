@@ -13,9 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.digital.payments.product.httpclient.Get;
-import com.digital.payments.product.httpclient.model.HttpClientRequest;
-import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
 
@@ -24,9 +21,6 @@ public class PaypalGetSubscriptionTest {
 
 	@Mock
 	PaypalAccessToken paypalAccessToken;
-	
-	@Mock
-	Get get;
 	
 	@InjectMocks
 	private PaypalGetSubscription paypalGetSubscription;
@@ -122,10 +116,7 @@ public class PaypalGetSubscriptionTest {
 	@DisplayName("test_get_subscription_success")
 	void testGetSubscriptionSuccess() {
 		
-		HttpClientResponse httpClientResponse = new HttpClientResponse(200, PAYPAL_RESPONSE);
-		
 		when(paypalAccessToken.execute()).thenReturn(ACCESS_TOKEN);
-		when(get.execute(any(HttpClientRequest.class))).thenReturn(httpClientResponse);
 		
 		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 3);
 		
@@ -140,10 +131,7 @@ public class PaypalGetSubscriptionTest {
 	@DisplayName("test_get_subscription_unauthorized")
 	void testGetSubscriptionUnauthorized() {
 		
-		HttpClientResponse httpClientResponse = new HttpClientResponse(401, "");
-		
 		when(paypalAccessToken.execute()).thenReturn(ACCESS_TOKEN);
-		when(get.execute(any(HttpClientRequest.class))).thenReturn(httpClientResponse);
 		
 		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 3);
 		

@@ -1,7 +1,5 @@
 package com.digital.payments.product.paypal;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -10,12 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.digital.payments.product.client.PaypalClient;
-import com.digital.payments.product.httpclient.Get;
-import com.digital.payments.product.httpclient.model.HttpClientRequest;
-import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
-import com.google.gson.Gson;
 
 @Component
 public class PaypalGetSubscription {
@@ -28,47 +22,25 @@ public class PaypalGetSubscription {
 	@Autowired
 	private PaypalClient paypalClient;
 
-	//private Get get = new Get();
-	
-	public Optional<PaypalGetSubscriptionResponse> execute(PaypalGetSubscriptionRequest request, int limit) {
+	public Optional<PaypalGetSubscriptionResponse> execute(PaypalGetSubscriptionRequest request, int limitRetries) {
 		
-		limit--;
+		limitRetries--;
 		
-		if (limit < 0) {
-			logger.debug("Authentication retries limit reached: " + limit);
+		if (limitRetries < 0) {
+			logger.debug("Authentication retries limit reached: " + limitRetries);
 			return Optional.empty();
 		}
 		
-		logger.debug("Handle request " + limit + ": " + request);
+		logger.debug("Handle request " + limitRetries + ": " + request);
 		
 		if (PaypalAccessToken.accessToken == null) {
 			paypalAccessToken.setProduct(request.getProduct());
 			paypalAccessToken.execute();
 		}
 
+		//TODO retry when get 401 error
 		PaypalGetSubscriptionResponse response = paypalClient.getSubscription("Bearer " + paypalAccessToken.accessToken, request.getSubscriptionId());
 		
-//		String url = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/" + request.getSubscriptionId();
-//		Map<String, String> headers = new HashMap<>();
-//		headers.put("Content-Type", "application/json");
-//		headers.put("Authorization", "Bearer " + PaypalAccessToken.accessToken);
-//		
-//		HttpClientRequest httpClientRequest = new HttpClientRequest(url, headers, null);
-//		
-//		logger.debug("httpClientRequest: " + httpClientRequest);
-//		
-//		HttpClientResponse httpClientResponse = get.execute(httpClientRequest);
-//		
-//		PaypalGetSubscriptionResponse response;
-//		
-//		if (httpClientResponse.getCode() == 401) {
-//			logger.debug("Expired Access Token. Request new one");
-//			
-//			PaypalAccessToken.accessToken = null;
-//			return execute(request, limit);
-//		} else {
-//			response = new Gson().fromJson(httpClientResponse.getBody(), PaypalGetSubscriptionResponse.class);
-//		}
 		return Optional.of(response);
 	}
 }
