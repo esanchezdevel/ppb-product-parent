@@ -2,26 +2,26 @@ package com.digital.payments.product.model.paypal;
 
 import java.util.Date;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PaypalGetSubscriptionResponse {
 
 	private String status;
 	
-	@SerializedName("status_update_time")
+	@JsonProperty("status_update_time")
 	private Date statusUpdateTime;
 	
 	private String id;
 	
-	@SerializedName("plan_id")
+	@JsonProperty("plan_id")
 	private String planId;
 	
-	@SerializedName("start_time")
+	@JsonProperty("start_time")
 	private Date startTime;
 	
 	private String quantity;
 	
-	@SerializedName("shipping_amount")
+	@JsonProperty("shipping_amount")
 	private ShippingAmount shippingAmount;
 	
 	private Subscriber subscriber;

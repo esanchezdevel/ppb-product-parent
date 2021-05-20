@@ -1,22 +1,22 @@
 package com.digital.payments.product.model.paypal;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Address {
 
-	@SerializedName("address_line_1")
+	@JsonProperty("address_line_1")
 	private String addressLine1;
 	
-	@SerializedName("admin_area_1")
+	@JsonProperty("admin_area_1")
 	private String adminArea1;
 	
-	@SerializedName("admin_area_2")
+	@JsonProperty("admin_area_2")
 	private String adminArea2;
 	
-	@SerializedName("postal_code")
+	@JsonProperty("postal_code")
 	private String postalCode;
 	
-	@SerializedName("country_code")
+	@JsonProperty("country_code")
 	private String countryCode;
 
 	public String getAddressLine1() {

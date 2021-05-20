@@ -1,21 +1,15 @@
 package com.digital.payments.product.paypal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.digital.payments.product.client.PaypalClient;
 import com.digital.payments.product.http.util.BasicAuthenticationHeader;
-import com.digital.payments.product.httpclient.Post;
-import com.digital.payments.product.httpclient.model.HttpClientRequest;
-import com.digital.payments.product.httpclient.model.HttpClientResponse;
 import com.digital.payments.product.model.PaypalCredential;
 import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
-import com.google.gson.Gson;
 
 @Component
 public class PaypalAccessToken {
@@ -26,10 +20,11 @@ public class PaypalAccessToken {
 	
 	private String product;
 
-	private Post post = new Post();
-
 	@Autowired
 	private PaypalCredentialRepository paypalCredentialRepository;
+	
+	@Autowired
+	private PaypalClient paypalClient;
 
 	public String execute() {
 
@@ -39,20 +34,11 @@ public class PaypalAccessToken {
 			logger.debug("ERROR! Credentials not found for product: " + this.product);
 			return null;
 		}
-		Map<String, String> headers = new HashMap<>();
-		headers.put("Authorization",
-				BasicAuthenticationHeader.create(paypalCredential.getUsername(), paypalCredential.getPassword()));
-		headers.put("Accept", "application/json");
-		headers.put("Accept-Language", "es_US");
 		
-		Map<String, Object> data = new HashMap<>();
-		data.put("grant_type", "client_credentials");
-
-		HttpClientRequest httpClientRequest = new HttpClientRequest("https://api-m.sandbox.paypal.com/v1/oauth2/token", headers, data);
-		HttpClientResponse httpClientResponse = post.execute(httpClientRequest);
+		String authenticationToken = BasicAuthenticationHeader.create(paypalCredential.getUsername(), paypalCredential.getPassword());
+		PaypalAccessTokenResponse response = paypalClient.requestAccessToken(authenticationToken, "grant_type=client_credentials");
 		
-		logger.debug("response: " + httpClientResponse);
-		PaypalAccessTokenResponse response = new Gson().fromJson(httpClientResponse.getBody(), PaypalAccessTokenResponse.class);
+		logger.debug("Access Token: " + response);
 		
 		PaypalAccessToken.accessToken = response.getAccessToken();
 		

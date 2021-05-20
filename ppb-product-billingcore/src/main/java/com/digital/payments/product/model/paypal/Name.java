@@ -1,10 +1,10 @@
 package com.digital.payments.product.model.paypal;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Name {
 
-	@SerializedName("given_name")
+	@JsonProperty("given_name")
 	private String givenName;
 	
 	private String surname;

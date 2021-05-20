@@ -1,21 +1,21 @@
 package com.digital.payments.product.model.paypal;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PaypalAccessTokenResponse {
 
 	private String scope;
 	
-	@SerializedName("access_token")
+	@JsonProperty("access_token")
 	private String accessToken;
 	
-	@SerializedName("token_type")
+	@JsonProperty("token_type")
 	private String tokenType;
 	
-	@SerializedName("app_id")
+	@JsonProperty("app_id")
 	private String appId;
 	
-	@SerializedName("expires_in")
+	@JsonProperty("expires_in")
 	private Integer expiresIn;
 	
 	private String nonce;

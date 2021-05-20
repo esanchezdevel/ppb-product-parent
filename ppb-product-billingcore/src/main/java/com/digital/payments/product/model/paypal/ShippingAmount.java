@@ -1,10 +1,10 @@
 package com.digital.payments.product.model.paypal;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ShippingAmount {
 
-	@SerializedName("currency_code")
+	@JsonProperty("currency_code")
 	private String currencyCode;
 	
 	private float value;

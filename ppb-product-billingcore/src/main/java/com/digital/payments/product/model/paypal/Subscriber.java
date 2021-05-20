@@ -1,18 +1,18 @@
 package com.digital.payments.product.model.paypal;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Subscriber {
 
-	@SerializedName("email_address")
+	@JsonProperty("email_address")
 	private String emailAddress;
 
-	@SerializedName("payer_id")
+	@JsonProperty("payer_id")
 	private String payerId;
 
 	private Name name;
 
-	@SerializedName("shipping_address")
+	@JsonProperty("shipping_address")
 	private ShippingAddress shippingAddress;
 
 	public String getEmailAddress() {
