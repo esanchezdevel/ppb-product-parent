@@ -5,28 +5,38 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.digital.payments.product.client.PaypalClient;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
+import com.google.gson.Gson;
 
 @ExtendWith(MockitoExtension.class)
 public class PaypalGetSubscriptionTest {
 
 	@Mock
-	PaypalAccessToken paypalAccessToken;
+	private PaypalAccessToken paypalAccessToken;
+	
+	@Mock
+	private PaypalClient paypalClient;
 	
 	@InjectMocks
 	private PaypalGetSubscription paypalGetSubscription;
 	
-	private PaypalGetSubscriptionRequest request;
+	private static PaypalGetSubscriptionRequest request;
 	
+	private static Gson gson;
+	
+	private static final String PRODUCT = "horoscope";
 	private static final String SUBSCRIPTION_ID = "I-MLDRBHTVWH8C";
 	private static final String ACCESS_TOKEN = "A21AAJ6GrKipZcl84yN0jVTJw7FOeJaxtlveHxHVCBPyhqPufYjaB6UTzF5H6k_ZTo-irh-vUSYJ9HHdX7MGcBs6-H_kOXZGA";
 	
@@ -107,16 +117,20 @@ public class PaypalGetSubscriptionTest {
 			"	}]\n" + 
 			"}";
 	
-	@BeforeEach
-	void setUp() {
-		request = new PaypalGetSubscriptionRequest(SUBSCRIPTION_ID);
+	@BeforeAll
+	static void setUp() {
+		gson = new Gson();
+		request = new PaypalGetSubscriptionRequest(SUBSCRIPTION_ID, PRODUCT);
 	}
 	
 	@Test
 	@DisplayName("test_get_subscription_success")
 	void testGetSubscriptionSuccess() {
 		
+		PaypalGetSubscriptionResponse paypalGetSubscriptionResponse = gson.fromJson(PAYPAL_RESPONSE, PaypalGetSubscriptionResponse.class);
+		
 		when(paypalAccessToken.execute()).thenReturn(ACCESS_TOKEN);
+		when(paypalClient.getSubscription(anyString(), anyString())).thenReturn(paypalGetSubscriptionResponse);
 		
 		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 3);
 		
@@ -132,11 +146,14 @@ public class PaypalGetSubscriptionTest {
 	void testGetSubscriptionUnauthorized() {
 		
 		when(paypalAccessToken.execute()).thenReturn(ACCESS_TOKEN);
+		when(paypalClient.getSubscription(anyString(), anyString())).thenThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized error"));
 		
 		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 3);
 		
 		assertAll(() -> {
 			assertFalse(response.isPresent(), "The Optional response must not be null");
 		});
+		
+		verify(paypalAccessToken, times(3)).execute();
 	}
 }

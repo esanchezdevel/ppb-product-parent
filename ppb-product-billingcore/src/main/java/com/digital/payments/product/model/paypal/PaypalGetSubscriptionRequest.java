@@ -5,8 +5,9 @@ public class PaypalGetSubscriptionRequest {
 	private String subscriptionId;
 	private String product;
 	
-	public PaypalGetSubscriptionRequest(String subscriptionId) {
+	public PaypalGetSubscriptionRequest(String subscriptionId, String product) {
 		this.subscriptionId = subscriptionId;
+		this.product = product;
 	}
 
 	public String getSubscriptionId() {

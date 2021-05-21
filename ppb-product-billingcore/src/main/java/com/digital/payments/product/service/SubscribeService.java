@@ -33,7 +33,7 @@ public class SubscribeService implements PpbService {
 		paypalAccessToken.setProduct(request.getProduct());
 		String accessToken = paypalAccessToken.execute();
 		
-		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId());
+		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId(), "horoscope");
 		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, RETRIES);
 		
 		if (paypalGetSubscriptionResponse.isPresent()) {

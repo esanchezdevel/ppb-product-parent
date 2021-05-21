@@ -5,12 +5,26 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.digital.payments.product.client.PaypalClient;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
 
+/**
+ * 
+ * @author Enrique Sanchez Jordan
+ * 
+ * This class request a token to paypal if there is no previous token 
+ * stored in memory.
+ * 
+ * When the token is present then makes the getSubscription request to 
+ * Paypal. If get unauthorized error, retry the process 3 times requesting
+ * a new authorization token
+ *
+ */
 @Component
 public class PaypalGetSubscription {
 
@@ -38,9 +52,36 @@ public class PaypalGetSubscription {
 			paypalAccessToken.execute();
 		}
 
-		//TODO retry when get 401 error
-		PaypalGetSubscriptionResponse response = paypalClient.getSubscription("Bearer " + paypalAccessToken.accessToken, request.getSubscriptionId());
-		
-		return Optional.of(response);
+		PaypalGetSubscriptionResponse response = null;
+		try {
+			response = paypalClient.getSubscription("Bearer " + PaypalAccessToken.accessToken, request.getSubscriptionId());
+		} catch (ResponseStatusException e) {
+			logger.error("ResponseStatusException captured. " + e.getStatus());
+			
+			if (isRetryNeeded(limitRetries, e)) {
+				logger.debug("retry needed. retrying request");
+				
+				PaypalAccessToken.accessToken = null;
+				
+				Optional<PaypalGetSubscriptionResponse> optionalResponse = execute(request, limitRetries);
+				
+				if (optionalResponse.isPresent()) {
+					response = optionalResponse.get();
+				}
+			}
+		}
+		return parseResponseToOptional(response);
+	}
+
+	private Optional<PaypalGetSubscriptionResponse> parseResponseToOptional(PaypalGetSubscriptionResponse response) {
+		if (response == null) {
+			return Optional.empty();
+		} else {
+			return Optional.of(response);	
+		}
+	}
+
+	private boolean isRetryNeeded(int limitRetries, ResponseStatusException e) {
+		return e.getStatus() == HttpStatus.UNAUTHORIZED && limitRetries > 0;
 	}
 }

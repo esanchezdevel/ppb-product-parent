@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
 
-import feign.Body;
 import feign.Headers;
 
 @FeignClient(name = "paypal", url = "${paypal.api.url}")
