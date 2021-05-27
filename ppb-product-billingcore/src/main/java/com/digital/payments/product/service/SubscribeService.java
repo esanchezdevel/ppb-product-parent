@@ -38,6 +38,8 @@ public class SubscribeService implements PpbService {
 		
 		if (paypalGetSubscriptionResponse.isPresent()) {
 			logger.debug("response: " + paypalGetSubscriptionResponse.get().toString());
+			
+			//TODO request to usermanagment microservice subscribe
 		} else {
 			logger.debug("no response from paypal");
 		}

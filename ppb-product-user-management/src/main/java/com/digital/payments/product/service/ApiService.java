@@ -1,9 +1,9 @@
 package com.digital.payments.product.service;
 
-import com.digital.payments.product.dto.Request;
-import com.digital.payments.product.dto.Response;
+import com.digital.payments.product.dto.RequestDTO;
+import com.digital.payments.product.dto.ResponseDTO;
 
 public interface ApiService {
 
-	Response execute(Request request);
+	ResponseDTO execute(RequestDTO request);
 }

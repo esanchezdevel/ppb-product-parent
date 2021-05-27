@@ -1,7 +1,5 @@
 package com.digital.payments.product.controller;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.payments.product.dto.BillingCoreRequest;
 import com.digital.payments.product.dto.BillingCoreResponse;
-import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
-import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
-import com.digital.payments.product.paypal.PaypalGetSubscription;
 import com.digital.payments.product.service.SubscribeService;
 
 @RestController

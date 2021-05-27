@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.payments.product.dto.SubscribeRequest;
-import com.digital.payments.product.dto.SubscribeResponse;
+import com.digital.payments.product.dto.SubscribeRequestDTO;
+import com.digital.payments.product.dto.SubscribeResponseDTO;
 import com.digital.payments.product.service.SubscribeService;
 
 @RestController
@@ -23,11 +23,11 @@ public class UserController {
 	private SubscribeService subscribeService;
 	
 	@PostMapping("/subscribe")
-	public ResponseEntity<?> subscribe(@RequestBody SubscribeRequest request) {
+	public ResponseEntity<?> subscribe(@RequestBody SubscribeRequestDTO request) {
 		
-		logger.debug("request: " + request);
+		logger.debug("Handling request: " + request);
 		
-		SubscribeResponse response = (SubscribeResponse) subscribeService.execute(request);
+		SubscribeResponseDTO response = (SubscribeResponseDTO) subscribeService.execute(request);
 		
 		return ResponseEntity.ok(response);
 	}

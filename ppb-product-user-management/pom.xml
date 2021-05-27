@@ -1,11 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.digital.payments.product</groupId>
-    <artifactId>ppb-product-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>ppb-product-user-management</artifactId>
-  <name>ppb-product-user-management</name>
-  <description>Digital Payments Users management microservice</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.digital.payments.product</groupId>
+		<artifactId>ppb-product-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>ppb-product-user-management</artifactId>
+	<name>ppb-product-user-management</name>
+	<description>Digital Payments Users management microservice</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.digital.payments.jpa</groupId>
+			<artifactId>ppb-product-jpa</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>
