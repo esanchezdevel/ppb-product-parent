@@ -1,40 +1,68 @@
 package com.digital.payments.product.service;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.digital.payments.product.client.UserManagementClient;
+import com.digital.payments.product.data.Data;
 import com.digital.payments.product.dto.BillingCoreRequest;
 import com.digital.payments.product.dto.BillingCoreResponse;
-import com.digital.payments.product.paypal.PaypalAccessToken;
+import com.digital.payments.product.model.dto.SubscribeResponseDTO;
+import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
+import com.digital.payments.product.paypal.PaypalGetSubscription;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class SubscribeServiceTest {
 
-	@Mock
-	private PaypalAccessToken paypalAccessToken;
+	@MockBean
+	private PaypalGetSubscription paypalGetSubscription;
+	
+	@MockBean
+	private UserManagementClient userManagementClient;
 	
 	@InjectMocks
 	private SubscribeService subscribe;
 	
+	ObjectMapper objectMapper;
+	
+	@BeforeEach
+	void setUp() {
+		objectMapper = new ObjectMapper();
+	}
+	
 	@Test
 	@DisplayName("test_subscribe_success")
-	void testSubscribeSuccess() {
+	void testSubscribeSuccess() throws JsonMappingException, JsonProcessingException {
 		
-		String tokenResponse = "";
 		
 		BillingCoreRequest request = new BillingCoreRequest();
 		request.setProduct("horoscope");
 		request.setProductTransactionId(111111);
 		
-		when(paypalAccessToken.execute()).thenReturn(tokenResponse);
-		// TODO mock the paypal subscribe request
+		PaypalGetSubscriptionResponse paypalGetSubscriptionResponse = objectMapper.readValue(Data.PAYPAL_GETSUBSCRIPTION_RESPONSE, PaypalGetSubscriptionResponse.class);
+
+		SubscribeResponseDTO subscribeResponseDTO = new SubscribeResponseDTO();
+		subscribeResponseDTO.setStatus("success");
+		subscribeResponseDTO.setDetails("User subscribed");
+		
+		when(paypalGetSubscription.execute(any(), anyInt())).thenReturn(Optional.of(paypalGetSubscriptionResponse));
+		when(userManagementClient.subscribe(any())).thenReturn(subscribeResponseDTO);
 		
 		BillingCoreResponse response = subscribe.execute(request);
+		
+		assertNotNull(response);
+		assertEquals("SUBSCRIBED", response.getTransactionStatus());
 	}
 }
