@@ -9,15 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.digital.payments.product.dto.BillingCoreRequest;
-import com.digital.payments.product.dto.BillingCoreResponse;
+import com.digital.payments.product.model.dto.BillingCoreRequestDTO;
+import com.digital.payments.product.model.dto.BillingCoreResponseDTO;
 import com.digital.payments.product.service.SubscribeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,13 +41,12 @@ public class BillingCoreControllerTest {
 	@DisplayName("test_subscribe_endpoint")
 	void testSubscribe() throws JsonProcessingException, Exception {
 		
-		BillingCoreRequest request = new BillingCoreRequest();
+		BillingCoreRequestDTO request = new BillingCoreRequestDTO();
 		request.setProduct("horoscope");
 		request.setProductTransactionId(1L);
 		request.setSubscriptionId("1111");
 		
-		BillingCoreResponse billingCoreResponse = new BillingCoreResponse();
-		billingCoreResponse.setTransactionStatus("SUBSCRIBED");
+		BillingCoreResponseDTO billingCoreResponse = new BillingCoreResponseDTO("SUBSCRIBED");
 		
 		when(subscribeService.execute(any())).thenReturn(billingCoreResponse);
 		

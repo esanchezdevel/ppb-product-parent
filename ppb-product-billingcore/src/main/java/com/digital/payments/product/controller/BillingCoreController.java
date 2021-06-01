@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digital.payments.product.dto.BillingCoreRequest;
-import com.digital.payments.product.dto.BillingCoreResponse;
+import com.digital.payments.product.model.dto.BillingCoreRequestDTO;
+import com.digital.payments.product.model.dto.BillingCoreResponseDTO;
 import com.digital.payments.product.service.SubscribeService;
 
 @RestController
@@ -22,16 +22,16 @@ public class BillingCoreController {
 	
 	
 	@PostMapping("/subscribe")
-	public ResponseEntity<?> subscribe(@RequestBody BillingCoreRequest request) {
+	public ResponseEntity<?> subscribe(@RequestBody BillingCoreRequestDTO request) {
 		
 		logger.debug("Handling request: " + request);
 		
-		BillingCoreResponse response = new BillingCoreResponse();
+		
 		
 		//TODO get subscriptionInfo from Paypal https://developer.paypal.com/docs/subscriptions/full-integration/subscription-management/
 		subscribeService.execute(request);
 		
-		response.setTransactionStatus("SUBSCRIBED");
+		BillingCoreResponseDTO response = new BillingCoreResponseDTO("SUBSCRIBED");
 		return ResponseEntity.ok(response);
 	}
 }

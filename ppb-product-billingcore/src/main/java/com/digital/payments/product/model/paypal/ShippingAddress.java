@@ -1,5 +1,8 @@
 package com.digital.payments.product.model.paypal;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ShippingAddress {
 
 	private Address address;

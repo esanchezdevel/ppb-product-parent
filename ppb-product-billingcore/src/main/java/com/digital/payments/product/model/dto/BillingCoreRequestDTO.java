@@ -1,6 +1,6 @@
-package com.digital.payments.product.dto;
+package com.digital.payments.product.model.dto;
 
-public class BillingCoreRequest {
+public class BillingCoreRequestDTO {
 
 	private String product;
 	private long productTransactionId;
@@ -32,7 +32,7 @@ public class BillingCoreRequest {
 
 	@Override
 	public String toString() {
-		return "BillingCoreRequest [product=" + product + ", productTransactionId=" + productTransactionId
+		return "BillingCoreRequestDTO [product=" + product + ", productTransactionId=" + productTransactionId
 				+ ", subscriptionId=" + subscriptionId + "]";
 	}
 }

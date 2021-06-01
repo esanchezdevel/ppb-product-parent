@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digital.payments.product.client.UserManagementClient;
-import com.digital.payments.product.dto.BillingCoreRequest;
-import com.digital.payments.product.dto.BillingCoreResponse;
+import com.digital.payments.product.model.dto.BillingCoreRequestDTO;
+import com.digital.payments.product.model.dto.BillingCoreResponseDTO;
 import com.digital.payments.product.model.dto.SubscribeRequestDTO;
 import com.digital.payments.product.model.dto.SubscribeResponseDTO;
 import com.digital.payments.product.model.mapper.SubscribeRequestMapper;
@@ -35,13 +35,14 @@ public class SubscribeService implements PpbService {
 	private UserManagementClient userManagementClient;
 	
 	@Override
-	public BillingCoreResponse execute(BillingCoreRequest request) {
+	public BillingCoreResponseDTO execute(BillingCoreRequestDTO request) {
 		
 		paypalAccessToken.setProduct(request.getProduct());
 		
 		PaypalGetSubscriptionRequest paypalGetSubscriptionRequest = new PaypalGetSubscriptionRequest(request.getSubscriptionId(), request.getProduct());
 		Optional<PaypalGetSubscriptionResponse> paypalGetSubscriptionResponse = paypalGetSubscription.execute(paypalGetSubscriptionRequest, RETRIES);
 		
+		String status = null;
 		if (paypalGetSubscriptionResponse.isPresent()) {
 			logger.debug("response: " + paypalGetSubscriptionResponse.get().toString());
 			
@@ -49,11 +50,16 @@ public class SubscribeService implements PpbService {
 			SubscribeResponseDTO subscribeResponseDTO = userManagementClient.subscribe(subscribeRequestDTO);
 			
 			logger.debug("usermanagement response: " + subscribeResponseDTO);
+			if ("success".equals(subscribeResponseDTO.getStatus())) {
+				status = "SUBSCRIBED";
+			} else {
+				status = "ERROR";
+			}
 		} else {
 			logger.debug("no response from paypal");
+			status = "ERROR";
 		}
-		//TODO return the DTO
-		return null;
+		return new BillingCoreResponseDTO(status);
 	}
 
 }
