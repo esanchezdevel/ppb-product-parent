@@ -50,7 +50,6 @@ public class SubscribeServiceTest {
 	@DisplayName("test_subscribe_success")
 	void testSubscribeSuccess() throws JsonMappingException, JsonProcessingException {
 		
-		
 		BillingCoreRequestDTO request = new BillingCoreRequestDTO();
 		request.setProduct("horoscope");
 		request.setProductTransactionId(111111);
@@ -69,5 +68,47 @@ public class SubscribeServiceTest {
 		
 		assertNotNull(response);
 		assertEquals("SUBSCRIBED", response.getTransactionStatus());
+	}
+	
+	@Test
+	@DisplayName("test_user_not_subscribed_in_paypal")
+	void testUserNotSubscribedInPaypal() {
+		
+		BillingCoreRequestDTO request = new BillingCoreRequestDTO();
+		request.setProduct("horoscope");
+		request.setProductTransactionId(111111);
+		
+		doNothing().when(paypalAccessToken).setProduct(anyString());
+		when(paypalGetSubscription.execute(any(), anyInt())).thenReturn(Optional.empty());
+		
+		BillingCoreResponseDTO response = subscribe.execute(request);
+		
+		assertNotNull(response);
+		assertEquals("ERROR", response.getTransactionStatus());
+	}
+	
+	
+	@Test
+	@DisplayName("test_error_subscribing_in_user_management")
+	void testErrorSubscribingInUserManagement() throws JsonMappingException, JsonProcessingException {
+		
+		BillingCoreRequestDTO request = new BillingCoreRequestDTO();
+		request.setProduct("horoscope");
+		request.setProductTransactionId(111111);
+		
+		PaypalGetSubscriptionResponse paypalGetSubscriptionResponse = objectMapper.readValue(Data.PAYPAL_GETSUBSCRIPTION_RESPONSE, PaypalGetSubscriptionResponse.class);
+
+		SubscribeResponseDTO subscribeResponseDTO = new SubscribeResponseDTO();
+		subscribeResponseDTO.setStatus("error");
+		subscribeResponseDTO.setDetails("User not subscribed");
+		
+		doNothing().when(paypalAccessToken).setProduct(anyString());
+		when(paypalGetSubscription.execute(any(), anyInt())).thenReturn(Optional.of(paypalGetSubscriptionResponse));
+		when(userManagementClient.subscribe(any())).thenReturn(subscribeResponseDTO);
+		
+		BillingCoreResponseDTO response = subscribe.execute(request);
+		
+		assertNotNull(response);
+		assertEquals("ERROR", response.getTransactionStatus());
 	}
 }

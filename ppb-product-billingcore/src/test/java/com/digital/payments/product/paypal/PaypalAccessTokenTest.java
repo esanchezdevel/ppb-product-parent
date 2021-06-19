@@ -78,4 +78,12 @@ public class PaypalAccessTokenTest {
 
 		assertEquals(null, accessTokenResponse);
 	}
+	
+	@Test
+	@DisplayName("test_set_product")
+	void testSetProduct() {
+		paypalAccessToken.setProduct("testProduct");
+		
+		assertEquals("testProduct", paypalAccessToken.getProduct());
+	}
 }
