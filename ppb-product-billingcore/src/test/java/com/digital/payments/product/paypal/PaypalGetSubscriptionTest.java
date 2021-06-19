@@ -8,10 +8,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,16 +20,17 @@ import com.digital.payments.product.model.paypal.PaypalGetSubscriptionRequest;
 import com.digital.payments.product.model.paypal.PaypalGetSubscriptionResponse;
 import com.google.gson.Gson;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class PaypalGetSubscriptionTest {
 
-	@Mock
+	@MockBean
 	private PaypalAccessToken paypalAccessToken;
 	
-	@Mock
+	@MockBean
 	private PaypalClient paypalClient;
 	
-	@InjectMocks
+	@Autowired
+	@SpyBean
 	private PaypalGetSubscription paypalGetSubscription;
 	
 	private static PaypalGetSubscriptionRequest request;
@@ -155,5 +156,34 @@ public class PaypalGetSubscriptionTest {
 		});
 		
 		verify(paypalAccessToken, times(3)).execute();
+	}
+	
+	@Test
+	@DisplayName("test_reach_limit")
+	void testReachLimit() {
+		
+		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 0);
+		
+		assertFalse(response.isPresent());
+	}
+	
+	@Test
+	@DisplayName("test_get_subscription_works_in_retry")
+	void testGetSubscriptionWorksInRetry() {
+		
+		PaypalGetSubscriptionResponse paypalGetSubscriptionResponse = gson.fromJson(PAYPAL_RESPONSE, PaypalGetSubscriptionResponse.class);
+				
+		Optional<PaypalGetSubscriptionResponse> paypalOptionalResponse = Optional.of(paypalGetSubscriptionResponse);
+		
+		//first request
+		when(paypalAccessToken.execute()).thenReturn(ACCESS_TOKEN);
+		when(paypalClient.getSubscription(anyString(), anyString())).thenThrow(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized error"));
+		
+		//second request		
+		doReturn(paypalOptionalResponse).when(paypalGetSubscription).execute(any(), eq(2));
+		
+		Optional<PaypalGetSubscriptionResponse> response = paypalGetSubscription.execute(request, 3);
+		
+		assertTrue(response.isPresent());		
 	}
 }

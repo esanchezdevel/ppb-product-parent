@@ -8,17 +8,16 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.digital.payments.product.client.PaypalClient;
 import com.digital.payments.product.model.PaypalCredential;
 import com.digital.payments.product.model.paypal.PaypalAccessTokenResponse;
 import com.digital.payments.product.repository.PaypalCredentialRepository;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class PaypalAccessTokenTest {
 
 	private static final String PRODUCT = "horoscope";
@@ -28,13 +27,13 @@ public class PaypalAccessTokenTest {
 	
 	private PaypalCredential paypalCredential;
 	
-	@Mock
+	@MockBean
 	private PaypalCredentialRepository paypalCredentialRepository;
 	
-	@Mock
+	@MockBean
 	private PaypalClient paypalClient;
 	
-	@InjectMocks
+	@Autowired
 	private PaypalAccessToken paypalAccessToken;
 	
 	@BeforeEach
@@ -67,5 +66,16 @@ public class PaypalAccessTokenTest {
 			assertEquals(ACCESS_TOKEN, accessTokenResponse, "Wrong access token value");
 			assertEquals(ACCESS_TOKEN, PaypalAccessToken.accessToken, "Wrong access token value in global variable");
 		});
+	}
+	
+	@Test
+	@DisplayName("test_missing_credentials")
+	void testMissingCredentials() {
+		
+		when(paypalCredentialRepository.findByProduct(any())).thenReturn(null);
+		
+		String accessTokenResponse = paypalAccessToken.execute();
+
+		assertEquals(null, accessTokenResponse);
 	}
 }
