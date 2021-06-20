@@ -3,14 +3,12 @@ package com.digital.payments.product.service;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.digital.payments.product.client.BillingCoreClient;
 import com.digital.payments.product.dto.SubscribeRequest;
@@ -18,22 +16,22 @@ import com.digital.payments.product.dto.SubscribeResponse;
 import com.digital.payments.product.jpa.entity.Transaction;
 import com.digital.payments.product.jpa.repository.TransactionRepository;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class SubscribeServiceTest {
 
 	private static Transaction transaction;
 	
-	@Mock
+	@MockBean
 	private BillingCoreClient billingCoreClient;
 	
-	@Mock
+	@MockBean
 	private TransactionRepository transactionRepository;
 	
-	@InjectMocks
+	@Autowired
     private SubscribeService subscribe;
 	
-	@BeforeAll
-	static void setUp() {
+	@BeforeEach
+	void setUp() {
 		transaction = new Transaction();
 		transaction.setId(new Long("1111111"));
 		transaction.setUserEmail("test@test.com");
@@ -42,7 +40,6 @@ public class SubscribeServiceTest {
 	
 	@Test
 	@DisplayName("test_subscribe_success")
-	@Disabled
 	void testSubscribeSuccess() {
 	
 		SubscribeRequest subscribeRequest = new SubscribeRequest();		
@@ -55,7 +52,7 @@ public class SubscribeServiceTest {
 		subscribeResponse.setTransactionStatus("SUBSCRIBED");
 		
 		when(transactionRepository.getOne(anyLong())).thenReturn(transaction);
-		when(billingCoreClient.subscribe(subscribeRequest)).thenReturn(subscribeResponse);
+		when(billingCoreClient.subscribe(any())).thenReturn(subscribeResponse);
 		
 		SubscribeResponse response = subscribe.execute(subscribeRequest);
 		
@@ -66,7 +63,6 @@ public class SubscribeServiceTest {
 	
 	@Test
 	@DisplayName("test_subscribe_error")
-	@Disabled
 	void testSubscribeError() {
 		SubscribeRequest subscribeRequest = new SubscribeRequest();		
 		subscribeRequest.setProduct("horoscope");
@@ -78,7 +74,7 @@ public class SubscribeServiceTest {
 		subscribeResponse.setTransactionStatus("ERROR");
 		
 		when(transactionRepository.getOne(anyLong())).thenReturn(transaction);
-		when(billingCoreClient.subscribe(subscribeRequest)).thenReturn(subscribeResponse);
+		when(billingCoreClient.subscribe(any())).thenReturn(subscribeResponse);
 		
 		SubscribeResponse response = subscribe.execute(subscribeRequest);
 		
