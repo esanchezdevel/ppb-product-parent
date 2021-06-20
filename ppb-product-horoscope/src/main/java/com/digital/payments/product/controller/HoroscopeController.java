@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.digital.payments.product.domain.Horoscope;
 import com.digital.payments.product.dto.SubscribeRequest;
 import com.digital.payments.product.dto.SubscribeResponse;
 import com.digital.payments.product.jpa.entity.Transaction;
 import com.digital.payments.product.jpa.repository.TransactionRepository;
+import com.digital.payments.product.service.HoroscopeService;
 import com.digital.payments.product.service.SubscribeService;
 
 @Controller
@@ -32,6 +34,9 @@ public class HoroscopeController {
 	
 	@Autowired
 	private SubscribeService subscribeService;
+	
+	@Autowired
+	private HoroscopeService horoscopeService;
 	
 	@GetMapping
 	public String index(Model model) {
@@ -69,6 +74,10 @@ public class HoroscopeController {
 	public String product(@PathVariable String sign, Model model) {
 		
 		model.addAttribute("sign", sign);
+		
+		Horoscope horoscope = horoscopeService.execute(sign);
+		
+		model.addAttribute("horoscope", horoscope);
 		
 		return "sign";
 	}
