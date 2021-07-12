@@ -65,7 +65,7 @@ public class HoroscopeController {
 		if ("SUBSCRIBED".equals(subscribeResponse.getTransactionStatus())) {
 			return ResponseEntity.ok("/horoscope/" + sign);	
 		} else {
-			return ResponseEntity.ok("/error");
+			return ResponseEntity.badRequest().body("/error");
 		}
 	}
 	
